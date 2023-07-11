@@ -8,6 +8,8 @@ import com.velocitypowered.api.event.proxy.ProxyPingEvent;
 import com.velocitypowered.api.plugin.Plugin;
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.ProxyServer;
+import com.velocitypowered.api.proxy.ServerConnection;
+import com.velocitypowered.api.proxy.server.ServerInfo;
 import com.velocitypowered.api.proxy.server.ServerPing;
 import org.slf4j.Logger;
 
@@ -44,9 +46,20 @@ public class VelocityPlayerListQuery {
                 event.setPing(event.getPing().asBuilder()
                         .samplePlayers(
                                 players.stream()
-                                        .map(player -> new ServerPing.SamplePlayer(player.getGameProfile().getName(),
-                                                player.getUniqueId()))
-                                        .toArray(ServerPing.SamplePlayer[]::new))
+                                        .map(player -> {
+                                            final String serverName = player.getCurrentServer()
+                                                    .map(ServerConnection::getServerInfo)
+                                                    .map(ServerInfo::getName)
+                                                    .map(name -> "["+name+"] ")
+                                                    .orElse("");
+                                            return new ServerPing.SamplePlayer(
+                                                    serverName + player.getUsername(),
+                                                    player.getUniqueId()
+                                            );
+                                        })
+                                        .toArray(ServerPing.SamplePlayer[]::new)
+                        ).onlinePlayers(players.size())
+                        .maximumPlayers(server.getConfiguration().getShowMaxPlayers())
                         .build());
             }
         });
