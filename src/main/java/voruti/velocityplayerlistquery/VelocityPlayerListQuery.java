@@ -6,13 +6,20 @@ import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
 import com.velocitypowered.api.event.proxy.ProxyPingEvent;
 import com.velocitypowered.api.plugin.Plugin;
+import com.velocitypowered.api.plugin.annotation.DataDirectory;
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.ProxyServer;
 import com.velocitypowered.api.proxy.ServerConnection;
 import com.velocitypowered.api.proxy.server.ServerInfo;
 import com.velocitypowered.api.proxy.server.ServerPing;
+import lombok.AccessLevel;
+import lombok.experimental.FieldDefaults;
 import org.slf4j.Logger;
+import voruti.velocityplayerlistquery.model.Config;
+import voruti.velocityplayerlistquery.service.PersistenceService;
+import voruti.velocityplayerlistquery.util.ServerListEntryBuilder;
 
+import java.nio.file.Path;
 import java.util.Collection;
 
 @Plugin(
@@ -23,40 +30,46 @@ import java.util.Collection;
         url = "https://github.com/voruti/VelocityPlayerListQuery",
         authors = {"voruti"}
 )
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class VelocityPlayerListQuery {
 
     @Inject
-    private Logger logger;
+    Logger logger;
 
     @Inject
-    private ProxyServer server;
+    ProxyServer server;
+
+    @Inject
+    @DataDirectory
+    Path dataDirectory;
+
+    ServerListEntryBuilder serverListEntryBuilder;
 
 
     @Subscribe
     public void onProxyInitialization(ProxyInitializeEvent event) {
-        logger.info("Enabled");
+        final Config config = new PersistenceService(logger, dataDirectory)
+                .loadConfig();
+        this.serverListEntryBuilder = new ServerListEntryBuilder(logger, config);
+
+        this.logger.info("Enabled");
     }
 
     @Subscribe
-    public EventTask onServerPing(ProxyPingEvent event) {
+    public EventTask onServerPing(final ProxyPingEvent event) {
+        this.logger.trace("Server ping event received, adding players to server list entry...");
+
         return EventTask.async(() -> {
-            Collection<Player> players = server.getAllPlayers();
+            Collection<Player> players = this.server.getAllPlayers();
 
             if (!players.isEmpty()) {
                 event.setPing(event.getPing().asBuilder()
                         .samplePlayers(
                                 players.stream()
-                                        .map(player -> {
-                                            final String serverName = player.getCurrentServer()
-                                                    .map(ServerConnection::getServerInfo)
-                                                    .map(ServerInfo::getName)
-                                                    .map(name -> "["+name+"] ")
-                                                    .orElse("");
-                                            return new ServerPing.SamplePlayer(
-                                                    serverName + player.getUsername(),
-                                                    player.getUniqueId()
-                                            );
-                                        })
+                                        .map(player -> new ServerPing.SamplePlayer(
+                                                this.serverListEntryBuilder.buildForPlayer(player),
+                                                player.getGameProfile().getId()
+                                        ))
                                         .toArray(ServerPing.SamplePlayer[]::new)
                         ).onlinePlayers(players.size())
                         .maximumPlayers(server.getConfiguration().getShowMaxPlayers())
