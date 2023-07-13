@@ -6,13 +6,18 @@ import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
 import com.velocitypowered.api.event.proxy.ProxyPingEvent;
 import com.velocitypowered.api.plugin.Plugin;
+import com.velocitypowered.api.plugin.annotation.DataDirectory;
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.ProxyServer;
 import com.velocitypowered.api.proxy.server.ServerPing;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import org.slf4j.Logger;
+import voruti.velocityplayerlistquery.model.Config;
+import voruti.velocityplayerlistquery.service.PersistenceService;
+import voruti.velocityplayerlistquery.util.ServerListEntryBuilder;
 
+import java.nio.file.Path;
 import java.util.Collection;
 
 @Plugin(
@@ -32,23 +37,37 @@ public class VelocityPlayerListQuery {
     @Inject
     ProxyServer server;
 
+    @Inject
+    @DataDirectory
+    Path dataDirectory;
+
+    ServerListEntryBuilder serverListEntryBuilder;
+
 
     @Subscribe
     public void onProxyInitialization(ProxyInitializeEvent event) {
-        logger.info("Enabled");
+        final Config config = new PersistenceService(logger, dataDirectory)
+                .loadConfig();
+        this.serverListEntryBuilder = new ServerListEntryBuilder(logger, config);
+
+        this.logger.info("Enabled");
     }
 
     @Subscribe
-    public EventTask onServerPing(ProxyPingEvent event) {
+    public EventTask onServerPing(final ProxyPingEvent event) {
+        this.logger.trace("Server ping event received, adding players to server list entry...");
+
         return EventTask.async(() -> {
-            Collection<Player> players = server.getAllPlayers();
+            Collection<Player> players = this.server.getAllPlayers();
 
             if (!players.isEmpty()) {
                 event.setPing(event.getPing().asBuilder()
                         .samplePlayers(
                                 players.stream()
-                                        .map(player -> new ServerPing.SamplePlayer(player.getGameProfile().getName(),
-                                                player.getUniqueId()))
+                                        .map(player -> new ServerPing.SamplePlayer(
+                                                this.serverListEntryBuilder.buildForPlayer(player),
+                                                player.getGameProfile().getId()
+                                        ))
                                         .toArray(ServerPing.SamplePlayer[]::new))
                         .build());
             }
