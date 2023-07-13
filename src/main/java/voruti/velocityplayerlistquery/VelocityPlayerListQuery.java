@@ -9,6 +9,8 @@ import com.velocitypowered.api.plugin.Plugin;
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.ProxyServer;
 import com.velocitypowered.api.proxy.server.ServerPing;
+import lombok.AccessLevel;
+import lombok.experimental.FieldDefaults;
 import org.slf4j.Logger;
 
 import java.util.Collection;
@@ -21,13 +23,14 @@ import java.util.Collection;
         url = "https://github.com/voruti/VelocityPlayerListQuery",
         authors = {"voruti"}
 )
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class VelocityPlayerListQuery {
 
     @Inject
-    private Logger logger;
+    Logger logger;
 
     @Inject
-    private ProxyServer server;
+    ProxyServer server;
 
 
     @Subscribe
