@@ -9,8 +9,6 @@ import com.velocitypowered.api.plugin.Plugin;
 import com.velocitypowered.api.plugin.annotation.DataDirectory;
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.ProxyServer;
-import com.velocitypowered.api.proxy.ServerConnection;
-import com.velocitypowered.api.proxy.server.ServerInfo;
 import com.velocitypowered.api.proxy.server.ServerPing;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
@@ -44,11 +42,12 @@ public class VelocityPlayerListQuery {
     Path dataDirectory;
 
     ServerListEntryBuilder serverListEntryBuilder;
+    Config config;
 
 
     @Subscribe
     public void onProxyInitialization(ProxyInitializeEvent event) {
-        final Config config = new PersistenceService(logger, dataDirectory)
+        config = new PersistenceService(logger, dataDirectory)
                 .loadConfig();
         this.serverListEntryBuilder = new ServerListEntryBuilder(logger, config);
 
@@ -63,7 +62,7 @@ public class VelocityPlayerListQuery {
             Collection<Player> players = this.server.getAllPlayers();
 
             if (!players.isEmpty()) {
-                event.setPing(event.getPing().asBuilder()
+                final ServerPing.Builder ping = event.getPing().asBuilder()
                         .samplePlayers(
                                 players.stream()
                                         .map(player -> new ServerPing.SamplePlayer(
@@ -71,9 +70,10 @@ public class VelocityPlayerListQuery {
                                                 player.getGameProfile().getId()
                                         ))
                                         .toArray(ServerPing.SamplePlayer[]::new)
-                        ).onlinePlayers(players.size())
-                        .maximumPlayers(server.getConfiguration().getShowMaxPlayers())
-                        .build());
+                        );
+                if (config.setMaxPlayers()) ping.maximumPlayers(players.size());
+                if (config.setOnlinePlayers()) ping.onlinePlayers(players.size());
+                event.setPing(ping.build());
             }
         });
     }

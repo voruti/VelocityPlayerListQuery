@@ -10,7 +10,9 @@ public class Config {
     public static final String FILE_NAME = "config.json";
 
     public static final Config DEFAULT_CONFIG = new Config(
-            "%1$s"
+            "%1$s",
+            false,
+            false
     );
 
 
@@ -22,4 +24,6 @@ public class Config {
      * </ul>
      */
     String serverListEntryFormat;
+    boolean setOnlinePlayers;
+    boolean setMaxPlayers;
 }
