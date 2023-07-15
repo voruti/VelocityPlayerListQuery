@@ -58,10 +58,17 @@ public class VelocityPlayerListQuery {
         this.logger.trace("Server ping event received, adding players to server list entry...");
 
         return EventTask.async(() -> {
-            Collection<Player> players = this.server.getAllPlayers();
+            final ServerPing serverPing = event.getPing();
 
+            // check if server ping is valid:
+            if (serverPing.getVersion() == null || serverPing.getDescriptionComponent() == null) {
+                this.logger.info("Server ping is invalid, skipping");
+                return;
+            }
+
+            final Collection<Player> players = this.server.getAllPlayers();
             if (!players.isEmpty()) {
-                event.setPing(event.getPing().asBuilder()
+                event.setPing(serverPing.asBuilder()
                         .samplePlayers(
                                 players.stream()
                                         .map(player -> new ServerPing.SamplePlayer(
