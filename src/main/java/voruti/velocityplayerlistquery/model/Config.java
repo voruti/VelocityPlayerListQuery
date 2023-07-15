@@ -10,7 +10,8 @@ public class Config {
     public static final String FILE_NAME = "config.json";
 
     public static final Config DEFAULT_CONFIG = new Config(
-            "%1$s"
+            "%1$s",
+            16
     );
 
 
@@ -22,4 +23,9 @@ public class Config {
      * </ul>
      */
     String serverListEntryFormat;
+
+    /**
+     * Configure how many players are shown in the server list. {@code <= 0} for unlimited (for backwards compatibility).
+     */
+    int maxListEntries;
 }
