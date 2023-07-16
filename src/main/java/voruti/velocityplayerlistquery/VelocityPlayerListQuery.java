@@ -18,7 +18,13 @@ import voruti.velocityplayerlistquery.service.PersistenceService;
 import voruti.velocityplayerlistquery.util.ServerListEntryBuilder;
 
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Plugin(
         id = "velocityplayerlistquery",
@@ -41,8 +47,8 @@ public class VelocityPlayerListQuery {
     @DataDirectory
     Path dataDirectory;
 
-    ServerListEntryBuilder serverListEntryBuilder;
     Config config;
+    ServerListEntryBuilder serverListEntryBuilder;
 
 
     @Subscribe
@@ -59,20 +65,50 @@ public class VelocityPlayerListQuery {
         this.logger.trace("Server ping event received, adding players to server list entry...");
 
         return EventTask.async(() -> {
-            Collection<Player> players = this.server.getAllPlayers();
+            final ServerPing serverPing = event.getPing();
 
+            // check if server ping is invalid:
+            if (serverPing.getVersion() == null || serverPing.getDescriptionComponent() == null) {
+                this.logger.info("Server ping is invalid, skipping");
+                return;
+            }
+
+            // collect players:
+            final Collection<Player> players = this.server.getAllPlayers();
             if (!players.isEmpty()) {
-                final ServerPing.Builder ping = event.getPing().asBuilder()
-                        .samplePlayers(
-                                players.stream()
-                                        .map(player -> new ServerPing.SamplePlayer(
-                                                this.serverListEntryBuilder.buildForPlayer(player),
-                                                player.getGameProfile().getId()
-                                        ))
-                                        .toArray(ServerPing.SamplePlayer[]::new)
+                final Stream<ServerPing.SamplePlayer> playerStream = players.stream()
+                        // format players:
+                        .map(player -> new ServerPing.SamplePlayer(
+                                this.serverListEntryBuilder.buildForPlayer(player),
+                                player.getGameProfile().getId()
+                        ))
+                        // sort alphabetically:
+                        .sorted(Comparator.comparing(ServerPing.SamplePlayer::getName));
+
+                // limit number of players shown in list, if configured:
+                final List<ServerPing.SamplePlayer> samplePlayers;
+                if (this.config.maxListEntries() > 0) {
+                    samplePlayers = playerStream
+                            .limit(this.config.maxListEntries())
+                            .collect(Collectors.toCollection(ArrayList::new));
+
+                    final int numberOfLeftOutPlayers = players.size() - this.config.maxListEntries();
+                    if (numberOfLeftOutPlayers > 0) {
+                        samplePlayers.add(
+                                new ServerPing.SamplePlayer(
+                                        String.format("...and %d more", numberOfLeftOutPlayers),
+                                        UUID.randomUUID()
+                                )
                         );
-                if (config.setMaxPlayers()) ping.maximumPlayers(players.size());
+                    }
+                } else {
+                    samplePlayers = playerStream.collect(Collectors.toList());
+                }
+                final ServerPing.Builder ping = serverPing.asBuilder()
+                        .samplePlayers(samplePlayers.toArray(new ServerPing.SamplePlayer[0]));
+                if (config.setMaxPlayers()) ping.maximumPlayers(this.server.getConfiguration().getShowMaxPlayers());
                 if (config.setOnlinePlayers()) ping.onlinePlayers(players.size());
+
                 event.setPing(ping.build());
             }
         });

@@ -11,6 +11,7 @@ public class Config {
 
     public static final Config DEFAULT_CONFIG = new Config(
             "%1$s",
+            16,
             false,
             false
     );
@@ -24,6 +25,17 @@ public class Config {
      * </ul>
      */
     String serverListEntryFormat;
+
+    /**
+     * Configure how many players are shown in the server list. {@code <= 0} for unlimited (for backwards compatibility).
+     */
+    int maxListEntries;
+    /**
+     * Should the online Players be replaced with Velocity Players?
+     */
     boolean setOnlinePlayers;
+    /**
+     * Should the maximum Player count be replaced with the Velocity configured amount?
+     */
     boolean setMaxPlayers;
 }
