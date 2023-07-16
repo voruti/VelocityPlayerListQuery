@@ -13,8 +13,12 @@ public class Config {
             "%1$s",
             16,
             false,
-            false
-    );
+            false,
+            false,
+            false,
+            "Unknown",
+            0
+            );
 
 
     /**
@@ -38,4 +42,20 @@ public class Config {
      * Should the maximum Player count be replaced with the Velocity configured amount?
      */
     boolean setMaxPlayers;
+    /**
+     * Should version information be set?
+     */
+    boolean setVersion;
+    /**
+     * Will only set version information, if the version information is undefined.
+     */
+    boolean onlySetUnsetVersion;
+    /**
+     * The version Name to be set
+     */
+    String versionName;
+    /**
+     * The protocol to be set
+     */
+    int versionProtocol;
 }

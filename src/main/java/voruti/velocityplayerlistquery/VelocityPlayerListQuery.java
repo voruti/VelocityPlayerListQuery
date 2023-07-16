@@ -47,8 +47,8 @@ public class VelocityPlayerListQuery {
     @DataDirectory
     Path dataDirectory;
 
-    Config config;
     ServerListEntryBuilder serverListEntryBuilder;
+    Config config;
 
 
     @Subscribe
@@ -66,9 +66,13 @@ public class VelocityPlayerListQuery {
 
         return EventTask.async(() -> {
             final ServerPing serverPing = event.getPing();
-
+            final boolean versionUnset = serverPing.getVersion() == null ||
+                    serverPing.getVersion().getName().equals("Unknown") ||
+                    serverPing.getVersion().getProtocol() == 0 ||
+                    serverPing.getDescriptionComponent() == null;
+            final boolean setVersion = config.setVersion() || (config.onlySetUnsetVersion() && versionUnset);
             // check if server ping is invalid:
-            if (serverPing.getVersion() == null || serverPing.getDescriptionComponent() == null) {
+            if (versionUnset && !setVersion) {
                 this.logger.info("Server ping is invalid, skipping");
                 return;
             }
@@ -108,7 +112,7 @@ public class VelocityPlayerListQuery {
                         .samplePlayers(samplePlayers.toArray(new ServerPing.SamplePlayer[0]));
                 if (config.setMaxPlayers()) ping.maximumPlayers(this.server.getConfiguration().getShowMaxPlayers());
                 if (config.setOnlinePlayers()) ping.onlinePlayers(players.size());
-
+                if (setVersion) ping.version(new ServerPing.Version(config.versionProtocol(), config.versionName()));
                 event.setPing(ping.build());
             }
         });
