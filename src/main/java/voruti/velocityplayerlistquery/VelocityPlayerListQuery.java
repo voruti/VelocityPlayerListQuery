@@ -109,6 +109,7 @@ public class VelocityPlayerListQuery {
                     samplePlayers = playerStream.collect(Collectors.toList());
                 }
                 final ServerPing.Builder ping = serverPing.asBuilder()
+                        .clearSamplePlayers()
                         .samplePlayers(samplePlayers.toArray(new ServerPing.SamplePlayer[0]));
                 if (config.setMaxPlayers()) ping.maximumPlayers(this.server.getConfiguration().getShowMaxPlayers());
                 if (config.setOnlinePlayers()) ping.onlinePlayers(players.size());
