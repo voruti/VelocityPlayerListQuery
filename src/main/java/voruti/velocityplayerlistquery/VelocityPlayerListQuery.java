@@ -5,6 +5,7 @@ import com.velocitypowered.api.event.EventTask;
 import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
 import com.velocitypowered.api.event.proxy.ProxyPingEvent;
+import com.velocitypowered.api.event.proxy.ProxyReloadEvent;
 import com.velocitypowered.api.plugin.Plugin;
 import com.velocitypowered.api.plugin.annotation.DataDirectory;
 import com.velocitypowered.api.proxy.Player;
@@ -58,6 +59,15 @@ public class VelocityPlayerListQuery {
         this.serverListEntryBuilder = new ServerListEntryBuilder(logger, config);
 
         this.logger.info("Enabled");
+    }
+
+    @Subscribe
+    public void onVelocityReload(ProxyReloadEvent event){
+        config = new PersistenceService(logger, dataDirectory)
+                .loadConfig();
+        this.serverListEntryBuilder = new ServerListEntryBuilder(logger, config);
+
+        this.logger.info("Reloaded");
     }
 
     @Subscribe
