@@ -3,6 +3,7 @@ package voruti.velocityplayerlistquery.model;
 import lombok.Builder;
 import lombok.Value;
 import lombok.experimental.Accessors;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 @Value
 @Builder
@@ -30,6 +31,7 @@ public class Config {
      *      <li>{@code %2$s}: placeholder for the server name, on which that player is currently playing on</li>
      * </ul>
      */
+    @Nullable
     String serverListEntryFormat;
 
     /**
@@ -72,5 +74,6 @@ public class Config {
      * The version name to be set.
      * Used by {@link #fillMissingVersionInfo} and {@link #replaceVersionInfo}.
      */
+    @Nullable
     String versionName;
 }

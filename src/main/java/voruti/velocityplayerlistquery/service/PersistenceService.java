@@ -23,11 +23,12 @@ public class PersistenceService {
     Path dataDirectory;
 
     @NonNull
-    final Gson gson = new GsonBuilder()
+    Gson gson = new GsonBuilder()
             .setPrettyPrinting()
             .create();
 
 
+    @NonNull
     public Config loadConfig() {
         logger.trace("Loading config...");
 
@@ -47,17 +48,20 @@ public class PersistenceService {
             }
 
             // load:
-            return gson.fromJson(
+            final Config loadedConfig = gson.fromJson(
                     Files.readString(configPath),
                     Config.class
             );
+            return loadedConfig != null
+                    ? loadedConfig
+                    : Config.DEFAULT;
         } catch (IOException | IllegalStateException e) {
             logger.error("Error while loading config", e);
             return Config.DEFAULT;
         }
     }
 
-    private <T> void writeFile(Path path, T content) throws IOException {
+    private <T> void writeFile(@NonNull final Path path, @NonNull final T content) throws IOException {
         logger.trace("Writing file: {}", path);
 
         Files.write(path, gson.toJson(content).getBytes());
