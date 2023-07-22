@@ -11,7 +11,7 @@ public class Config {
 
     public static final String FILE_NAME = "config.json";
 
-    public static final Config DEFAULT_CONFIG = new ConfigBuilder()
+    public static final Config DEFAULT = new ConfigBuilder()
             .serverListEntryFormat("%1$s")
             .maxListEntries(16)
             .replaceOnlinePlayerCount(false)

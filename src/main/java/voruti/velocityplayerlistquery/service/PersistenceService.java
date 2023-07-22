@@ -39,8 +39,8 @@ public class PersistenceService {
 
             final Path configPath = dataDirectory.resolve(Config.FILE_NAME);
             if (!Files.exists(configPath)) {
-                this.writeFile(configPath, Config.DEFAULT_CONFIG);
-                return Config.DEFAULT_CONFIG;
+                this.writeFile(configPath, Config.DEFAULT);
+                return Config.DEFAULT;
             }
             if (!Files.isRegularFile(configPath) || !Files.isReadable(configPath)) {
                 throw new IllegalStateException("Config file is invalid");
@@ -53,7 +53,7 @@ public class PersistenceService {
             );
         } catch (IOException | IllegalStateException e) {
             logger.error("Error while loading config", e);
-            return Config.DEFAULT_CONFIG;
+            return Config.DEFAULT;
         }
     }
 
