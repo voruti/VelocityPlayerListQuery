@@ -48,26 +48,26 @@ public class VelocityPlayerListQuery {
     @DataDirectory
     Path dataDirectory;
 
-    ServerListEntryBuilder serverListEntryBuilder;
     Config config;
+    ServerListEntryBuilder serverListEntryBuilder;
 
 
     @Subscribe
     public void onProxyInitialization(ProxyInitializeEvent event) {
-        config = new PersistenceService(logger, dataDirectory)
-                .loadConfig();
-        this.serverListEntryBuilder = new ServerListEntryBuilder(logger, config);
-
-        this.logger.info("Enabled");
+        reloadPlugin();
     }
 
     @Subscribe
-    public void onVelocityReload(ProxyReloadEvent event){
-        config = new PersistenceService(logger, dataDirectory)
+    public void onVelocityReload(ProxyReloadEvent event) {
+        reloadPlugin();
+    }
+
+    private void reloadPlugin() {
+        this.config = new PersistenceService(logger, dataDirectory)
                 .loadConfig();
         this.serverListEntryBuilder = new ServerListEntryBuilder(logger, config);
 
-        this.logger.info("Reloaded");
+        this.logger.info("Loaded config");
     }
 
     @Subscribe
