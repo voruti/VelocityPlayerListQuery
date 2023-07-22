@@ -16,10 +16,10 @@ public class Config {
             .maxListEntries(16)
             .replaceOnlinePlayerCount(false)
             .replaceMaxPlayerCount(false)
-            .setVersion(false)
-            .onlySetUnsetVersion(false)
-            .versionName("Unknown")
-            .versionProtocol(0)
+            .fillMissingVersionInfo(false)
+            .replaceVersionInfo(false)
+            .versionProtocol(4) // 1.7.2
+            .versionName("Velocity")
             .build();
 
 
@@ -39,7 +39,7 @@ public class Config {
     int maxListEntries;
 
     /**
-     * Should the online player count be replaced with Velocity players?
+     * Should the online player count be replaced with the number of players currently connected to Velocity?
      * Useful when using <code>ping-passthrough = "all"</code>.
      */
     boolean replaceOnlinePlayerCount;
@@ -50,20 +50,27 @@ public class Config {
     boolean replaceMaxPlayerCount;
 
     /**
-     * Should version information be set?
+     * Should the version information be replaced with
+     * what is set in {@link #versionProtocol} and {@link #versionName},
+     * <strong>when no version is detected</strong>?
+     * Useful when the backend server/s is/are unavailable or still starting.
      */
-    boolean setVersion;
+    boolean fillMissingVersionInfo;
     /**
-     * Will only set version information, if the version information is undefined.
+     * Should the version information <strong>always</strong> be replaced with
+     * what is set in {@link #versionProtocol} and {@link #versionName}?
+     * Extends {@link #fillMissingVersionInfo}.
+     * Useful when using <code>ping-passthrough = "all"</code>.
      */
-    boolean onlySetUnsetVersion;
-
-    /**
-     * The version name to be set.
-     */
-    String versionName;
+    boolean replaceVersionInfo;
     /**
      * The protocol number to be set.
+     * Used by {@link #fillMissingVersionInfo} and {@link #replaceVersionInfo}.
      */
     int versionProtocol;
+    /**
+     * The version name to be set.
+     * Used by {@link #fillMissingVersionInfo} and {@link #replaceVersionInfo}.
+     */
+    String versionName;
 }
