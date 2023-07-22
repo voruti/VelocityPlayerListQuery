@@ -121,8 +121,8 @@ public class VelocityPlayerListQuery {
                 final ServerPing.Builder ping = serverPing.asBuilder()
                         .clearSamplePlayers()
                         .samplePlayers(samplePlayers.toArray(new ServerPing.SamplePlayer[0]));
-                if (config.setMaxPlayers()) ping.maximumPlayers(this.server.getConfiguration().getShowMaxPlayers());
-                if (config.setOnlinePlayers()) ping.onlinePlayers(players.size());
+                if (config.replaceMaxPlayerCount()) ping.maximumPlayers(this.server.getConfiguration().getShowMaxPlayers());
+                if (config.replaceOnlinePlayerCount()) ping.onlinePlayers(players.size());
                 if (setVersion) ping.version(new ServerPing.Version(config.versionProtocol(), config.versionName()));
                 event.setPing(ping.build());
             }

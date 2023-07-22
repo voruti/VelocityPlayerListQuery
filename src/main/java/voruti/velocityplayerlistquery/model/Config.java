@@ -14,8 +14,8 @@ public class Config {
     public static final Config DEFAULT_CONFIG = new ConfigBuilder()
             .serverListEntryFormat("%1$s")
             .maxListEntries(16)
-            .setOnlinePlayers(false)
-            .setMaxPlayers(false)
+            .replaceOnlinePlayerCount(false)
+            .replaceMaxPlayerCount(false)
             .setVersion(false)
             .onlySetUnsetVersion(false)
             .versionName("Unknown")
@@ -39,15 +39,15 @@ public class Config {
     int maxListEntries;
 
     /**
-     * Should the online players be replaced with Velocity players?
+     * Should the online player count be replaced with Velocity players?
      * Useful when using <code>ping-passthrough = "all"</code>.
      */
-    boolean setOnlinePlayers;
+    boolean replaceOnlinePlayerCount;
     /**
      * Should the maximum player count be replaced with the Velocity configured amount?
      * Useful when using <code>ping-passthrough = "all"</code>.
      */
-    boolean setMaxPlayers;
+    boolean replaceMaxPlayerCount;
 
     /**
      * Should version information be set?
