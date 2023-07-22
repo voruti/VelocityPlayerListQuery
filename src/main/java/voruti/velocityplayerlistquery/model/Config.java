@@ -1,24 +1,26 @@
 package voruti.velocityplayerlistquery.model;
 
+import lombok.Builder;
 import lombok.Value;
 import lombok.experimental.Accessors;
 
 @Value
+@Builder
 @Accessors(fluent = true)
 public class Config {
 
     public static final String FILE_NAME = "config.json";
 
-    public static final Config DEFAULT_CONFIG = new Config(
-            "%1$s",
-            16,
-            false,
-            false,
-            false,
-            false,
-            "Unknown",
-            0
-            );
+    public static final Config DEFAULT_CONFIG = new ConfigBuilder()
+            .serverListEntryFormat("%1$s")
+            .maxListEntries(16)
+            .setOnlinePlayers(false)
+            .setMaxPlayers(false)
+            .setVersion(false)
+            .onlySetUnsetVersion(false)
+            .versionName("Unknown")
+            .versionProtocol(0)
+            .build();
 
 
     /**
@@ -31,17 +33,22 @@ public class Config {
     String serverListEntryFormat;
 
     /**
-     * Configure how many players are shown in the server list. {@code <= 0} for unlimited (for backwards compatibility).
+     * Configure how many players are shown in the server list.
+     * {@code <= 0} for unlimited (for backwards compatibility).
      */
     int maxListEntries;
+
     /**
-     * Should the online Players be replaced with Velocity Players?
+     * Should the online players be replaced with Velocity players?
+     * Useful when using <code>ping-passthrough = "all"</code>.
      */
     boolean setOnlinePlayers;
     /**
-     * Should the maximum Player count be replaced with the Velocity configured amount?
+     * Should the maximum player count be replaced with the Velocity configured amount?
+     * Useful when using <code>ping-passthrough = "all"</code>.
      */
     boolean setMaxPlayers;
+
     /**
      * Should version information be set?
      */
@@ -50,12 +57,13 @@ public class Config {
      * Will only set version information, if the version information is undefined.
      */
     boolean onlySetUnsetVersion;
+
     /**
-     * The version Name to be set
+     * The version name to be set.
      */
     String versionName;
     /**
-     * The protocol to be set
+     * The protocol number to be set.
      */
     int versionProtocol;
 }

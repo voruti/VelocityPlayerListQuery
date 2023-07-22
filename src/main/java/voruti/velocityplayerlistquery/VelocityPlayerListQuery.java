@@ -53,16 +53,16 @@ public class VelocityPlayerListQuery {
 
 
     @Subscribe
-    public void onProxyInitialization(ProxyInitializeEvent event) {
-        reloadPlugin();
+    public void onProxyInitialization(ProxyInitializeEvent ignored) {
+        this.loadConfig();
     }
 
     @Subscribe
-    public void onVelocityReload(ProxyReloadEvent event) {
-        reloadPlugin();
+    public void onVelocityReload(ProxyReloadEvent ignored) {
+        this.loadConfig();
     }
 
-    private void reloadPlugin() {
+    private void loadConfig() {
         this.config = new PersistenceService(logger, dataDirectory)
                 .loadConfig();
         this.serverListEntryBuilder = new ServerListEntryBuilder(logger, config);
