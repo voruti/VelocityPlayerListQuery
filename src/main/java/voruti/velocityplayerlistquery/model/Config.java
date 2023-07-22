@@ -13,6 +13,7 @@ public class Config {
     public static final String FILE_NAME = "config.json";
 
     public static final Config DEFAULT = new ConfigBuilder()
+            .playerListMode(PlayerListMode.ADD)
             .serverListEntryFormat("%1$s")
             .maxListEntries(16)
             .replaceOnlinePlayerCount(false)
@@ -23,6 +24,16 @@ public class Config {
             .versionName("Velocity")
             .build();
 
+
+    /**
+     * Configure how players are shown in the player list.
+     *
+     * @see PlayerListMode#UNCHANGED
+     * @see PlayerListMode#ADD
+     * @see PlayerListMode#REPLACE
+     */
+    @Nullable
+    PlayerListMode playerListMode;
 
     /**
      * Configure how players are shown in the server list.
@@ -76,4 +87,21 @@ public class Config {
      */
     @Nullable
     String versionName;
+
+
+    public enum PlayerListMode {
+        /**
+         * Keep the player list as it is.
+         */
+        UNCHANGED,
+        /**
+         * Add players to the player list.
+         * {@link #serverListEntryFormat} and {@link #maxListEntries} are only applied for the added players.
+         */
+        ADD,
+        /**
+         * Replace the player list with players according to {@link #serverListEntryFormat} and {@link #maxListEntries}.
+         */
+        REPLACE
+    }
 }
