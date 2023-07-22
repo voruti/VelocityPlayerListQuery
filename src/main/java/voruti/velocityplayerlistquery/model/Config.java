@@ -13,7 +13,7 @@ public class Config {
     public static final String FILE_NAME = "config.json";
 
     public static final Config DEFAULT = new ConfigBuilder()
-            .playerListMode(PlayerListMode.ADD)
+            .playerListMode(PlayerListMode.REPLACE)
             .serverListEntryFormat("%1$s")
             .maxListEntries(16)
             .replaceOnlinePlayerCount(false)
