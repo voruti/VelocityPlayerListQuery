@@ -14,10 +14,10 @@ import org.slf4j.Logger;
 import voruti.velocityplayerlistquery.model.exception.InvalidServerPingException;
 import voruti.velocityplayerlistquery.service.ConfigService;
 import voruti.velocityplayerlistquery.service.serverpingprocessor.ServerPingProcessor;
+import voruti.velocityplayerlistquery.service.serverpingprocessor.ServerPingProcessorRegistry;
 
 import javax.inject.Inject;
 import java.util.Optional;
-import java.util.Set;
 
 @Plugin(
         id = "velocityplayerlistquery",
@@ -37,7 +37,7 @@ public class VelocityPlayerListQuery {
     ConfigService configService;
 
     @Inject
-    Set<ServerPingProcessor> serverPingProcessors;
+    ServerPingProcessorRegistry serverPingProcessorRegistry;
 
 
     @Subscribe
@@ -84,7 +84,7 @@ public class VelocityPlayerListQuery {
 
         // apply all server ping processors:
         boolean isModified = false;
-        for (ServerPingProcessor processor : this.serverPingProcessors) {
+        for (ServerPingProcessor processor : this.serverPingProcessorRegistry.serverPingProcessorList()) {
             if (processor.isEnabled()) {
                 processor.applyToServerPing(builder);
                 isModified = true;
