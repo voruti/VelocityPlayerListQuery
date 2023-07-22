@@ -11,8 +11,14 @@ public class Config {
 
     public static final Config DEFAULT_CONFIG = new Config(
             "%1$s",
-            16
-    );
+            16,
+            false,
+            false,
+            false,
+            false,
+            "Unknown",
+            0
+            );
 
 
     /**
@@ -28,4 +34,28 @@ public class Config {
      * Configure how many players are shown in the server list. {@code <= 0} for unlimited (for backwards compatibility).
      */
     int maxListEntries;
+    /**
+     * Should the online Players be replaced with Velocity Players?
+     */
+    boolean setOnlinePlayers;
+    /**
+     * Should the maximum Player count be replaced with the Velocity configured amount?
+     */
+    boolean setMaxPlayers;
+    /**
+     * Should version information be set?
+     */
+    boolean setVersion;
+    /**
+     * Will only set version information, if the version information is undefined.
+     */
+    boolean onlySetUnsetVersion;
+    /**
+     * The version Name to be set
+     */
+    String versionName;
+    /**
+     * The protocol to be set
+     */
+    int versionProtocol;
 }

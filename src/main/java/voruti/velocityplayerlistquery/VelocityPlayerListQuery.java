@@ -5,6 +5,7 @@ import com.velocitypowered.api.event.EventTask;
 import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
 import com.velocitypowered.api.event.proxy.ProxyPingEvent;
+import com.velocitypowered.api.event.proxy.ProxyReloadEvent;
 import com.velocitypowered.api.plugin.Plugin;
 import com.velocitypowered.api.plugin.annotation.DataDirectory;
 import com.velocitypowered.api.proxy.Player;
@@ -47,17 +48,26 @@ public class VelocityPlayerListQuery {
     @DataDirectory
     Path dataDirectory;
 
-    Config config;
     ServerListEntryBuilder serverListEntryBuilder;
+    Config config;
 
 
     @Subscribe
     public void onProxyInitialization(ProxyInitializeEvent event) {
-        this.config = new PersistenceService(logger, dataDirectory)
+        config = new PersistenceService(logger, dataDirectory)
                 .loadConfig();
         this.serverListEntryBuilder = new ServerListEntryBuilder(logger, config);
 
         this.logger.info("Enabled");
+    }
+
+    @Subscribe
+    public void onVelocityReload(ProxyReloadEvent event){
+        config = new PersistenceService(logger, dataDirectory)
+                .loadConfig();
+        this.serverListEntryBuilder = new ServerListEntryBuilder(logger, config);
+
+        this.logger.info("Reloaded");
     }
 
     @Subscribe
@@ -66,9 +76,13 @@ public class VelocityPlayerListQuery {
 
         return EventTask.async(() -> {
             final ServerPing serverPing = event.getPing();
-
+            final boolean versionUnset = serverPing.getVersion() == null ||
+                    serverPing.getVersion().getName().equals("Unknown") ||
+                    serverPing.getVersion().getProtocol() == 0 ||
+                    serverPing.getDescriptionComponent() == null;
+            final boolean setVersion = config.setVersion() || (config.onlySetUnsetVersion() && versionUnset);
             // check if server ping is invalid:
-            if (serverPing.getVersion() == null || serverPing.getDescriptionComponent() == null) {
+            if (versionUnset && !setVersion) {
                 this.logger.info("Server ping is invalid, skipping");
                 return;
             }
@@ -104,12 +118,13 @@ public class VelocityPlayerListQuery {
                 } else {
                     samplePlayers = playerStream.collect(Collectors.toList());
                 }
-
-                event.setPing(
-                        serverPing.asBuilder()
-                                .samplePlayers(samplePlayers.toArray(new ServerPing.SamplePlayer[0]))
-                                .build()
-                );
+                final ServerPing.Builder ping = serverPing.asBuilder()
+                        .clearSamplePlayers()
+                        .samplePlayers(samplePlayers.toArray(new ServerPing.SamplePlayer[0]));
+                if (config.setMaxPlayers()) ping.maximumPlayers(this.server.getConfiguration().getShowMaxPlayers());
+                if (config.setOnlinePlayers()) ping.onlinePlayers(players.size());
+                if (setVersion) ping.version(new ServerPing.Version(config.versionProtocol(), config.versionName()));
+                event.setPing(ping.build());
             }
         });
     }
