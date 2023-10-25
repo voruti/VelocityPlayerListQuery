@@ -4,6 +4,7 @@ import com.velocitypowered.api.proxy.ProxyServer;
 import com.velocitypowered.api.proxy.server.ServerPing;
 import lombok.NonNull;
 import lombok.experimental.FieldDefaults;
+import voruti.velocityplayerlistquery.hook.VanishBridgeHook;
 import voruti.velocityplayerlistquery.service.ConfigService;
 
 import javax.inject.Inject;
@@ -18,6 +19,9 @@ public class OnlinePlayerCountServerPingProcessor extends ServerPingProcessor {
 
     @Inject
     ProxyServer proxyServer;
+    
+    @Inject
+    VanishBridgeHook vanishBridgeHook;
 
 
     @Override
@@ -29,6 +33,6 @@ public class OnlinePlayerCountServerPingProcessor extends ServerPingProcessor {
     public void applyToServerPing(@NonNull final ServerPing.Builder serverPing) {
         super.applyToServerPing(serverPing);
 
-        serverPing.onlinePlayers(this.proxyServer.getPlayerCount());
+        serverPing.onlinePlayers(this.vanishBridgeHook.hooked() ? this.vanishBridgeHook.unvanishedPlayerCount() : this.proxyServer.getPlayerCount());
     }
 }

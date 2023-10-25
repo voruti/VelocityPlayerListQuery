@@ -5,12 +5,14 @@ import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
 import com.velocitypowered.api.event.proxy.ProxyPingEvent;
 import com.velocitypowered.api.event.proxy.ProxyReloadEvent;
+import com.velocitypowered.api.plugin.Dependency;
 import com.velocitypowered.api.plugin.Plugin;
 import com.velocitypowered.api.proxy.server.ServerPing;
 import lombok.AccessLevel;
 import lombok.NonNull;
 import lombok.experimental.FieldDefaults;
 import org.slf4j.Logger;
+import voruti.velocityplayerlistquery.hook.VanishBridgeHook;
 import voruti.velocityplayerlistquery.model.exception.InvalidServerPingException;
 import voruti.velocityplayerlistquery.service.ConfigService;
 import voruti.velocityplayerlistquery.service.serverpingprocessor.ServerPingProcessor;
@@ -25,7 +27,10 @@ import java.util.Optional;
         version = BuildConstants.VERSION,
         description = "A Velocity plugin that shows current players in the server list.",
         url = "https://github.com/voruti/VelocityPlayerListQuery",
-        authors = {"voruti"}
+        authors = {"voruti"},
+        dependencies = {
+            @Dependency(id = "vanishbridge", optional = true)
+        }
 )
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class VelocityPlayerListQuery {
@@ -38,12 +43,17 @@ public class VelocityPlayerListQuery {
 
     @Inject
     ServerPingProcessorRegistry serverPingProcessorRegistry;
+    
+    @Inject
+    VanishBridgeHook vanishBridgeHook;
 
 
     @Subscribe
     public void onProxyInitialization(ProxyInitializeEvent ignored) {
         this.configService.reloadConfig();
-
+        
+        if (this.vanishBridgeHook.hooked()) this.logger.info("VanishBridge found, enabling vanish support");
+        
         this.logger.info("Enabled");
     }
 
