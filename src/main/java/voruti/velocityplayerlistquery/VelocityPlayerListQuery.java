@@ -12,7 +12,7 @@ import lombok.AccessLevel;
 import lombok.NonNull;
 import lombok.experimental.FieldDefaults;
 import org.slf4j.Logger;
-import voruti.velocityplayerlistquery.hook.VanishBridgeHook;
+import voruti.velocityplayerlistquery.hook.Hooks;
 import voruti.velocityplayerlistquery.model.exception.InvalidServerPingException;
 import voruti.velocityplayerlistquery.service.ConfigService;
 import voruti.velocityplayerlistquery.service.serverpingprocessor.ServerPingProcessor;
@@ -45,14 +45,15 @@ public class VelocityPlayerListQuery {
     ServerPingProcessorRegistry serverPingProcessorRegistry;
 
     @Inject
-    VanishBridgeHook vanishBridgeHook;
+    Hooks hooks;
 
 
     @Subscribe
     public void onProxyInitialization(ProxyInitializeEvent ignored) {
         this.configService.reloadConfig();
 
-        if (this.vanishBridgeHook.hooked()) this.logger.info("VanishBridge found, enabling vanish support");
+        this.hooks.vanishBridge().ifPresent(unused ->
+                this.logger.info("VanishBridge found, enabling vanish support"));
 
         this.logger.info("Enabled");
     }

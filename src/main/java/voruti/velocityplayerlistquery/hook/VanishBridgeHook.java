@@ -1,25 +1,21 @@
 package voruti.velocityplayerlistquery.hook;
 
-import com.google.inject.Inject;
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.ProxyServer;
 import dev.loapu.vanishbridge.api.VanishBridgeProvider;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
-import javax.inject.Singleton;
 import java.util.ArrayList;
 import java.util.Collection;
 
-@Singleton
-@FieldDefaults(level = AccessLevel.PRIVATE)
+@AllArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class VanishBridgeHook {
-    @Inject
+
     ProxyServer server;
 
-    public boolean hooked() {
-        return server.getPluginManager().isLoaded("vanishbridge");
-    }
 
     public Collection<Player> unvanishedPlayers() {
         var allPlayers = server.getAllPlayers();
