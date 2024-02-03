@@ -29,7 +29,7 @@ import java.util.Optional;
         url = "https://github.com/voruti/VelocityPlayerListQuery",
         authors = {"voruti"},
         dependencies = {
-            @Dependency(id = "vanishbridge", optional = true)
+                @Dependency(id = "vanishbridge", optional = true)
         }
 )
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -43,7 +43,7 @@ public class VelocityPlayerListQuery {
 
     @Inject
     ServerPingProcessorRegistry serverPingProcessorRegistry;
-    
+
     @Inject
     VanishBridgeHook vanishBridgeHook;
 
@@ -51,9 +51,9 @@ public class VelocityPlayerListQuery {
     @Subscribe
     public void onProxyInitialization(ProxyInitializeEvent ignored) {
         this.configService.reloadConfig();
-        
+
         if (this.vanishBridgeHook.hooked()) this.logger.info("VanishBridge found, enabling vanish support");
-        
+
         this.logger.info("Enabled");
     }
 

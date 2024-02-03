@@ -34,7 +34,7 @@ public class PlayerListServerPingProcessor extends ServerPingProcessor {
 
     @Inject
     ServerListEntryBuilderService serverListEntryBuilderService;
-    
+
     @Inject
     VanishBridgeHook vanishBridgeHook;
 

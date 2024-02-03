@@ -19,7 +19,7 @@ public class OnlinePlayerCountServerPingProcessor extends ServerPingProcessor {
 
     @Inject
     ProxyServer proxyServer;
-    
+
     @Inject
     VanishBridgeHook vanishBridgeHook;
 
