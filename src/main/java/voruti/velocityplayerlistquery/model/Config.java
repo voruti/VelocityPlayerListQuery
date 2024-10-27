@@ -78,6 +78,7 @@ public class Config {
     boolean replaceVersionInfo;
     /**
      * The protocol number to be set.
+     * You can find all available protocol versions at <a href="https://minecraft.fandom.com/wiki/Protocol_version#Java_Edition_2">https://minecraft.fandom.com/wiki/Protocol_version#Java_Edition_2</a>.
      * Used by {@link #fillMissingVersionInfo} and {@link #replaceVersionInfo}.
      */
     int versionProtocol;
