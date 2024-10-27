@@ -76,17 +76,7 @@ public class PlayerListServerPingProcessor extends ServerPingProcessor {
         if (maxListEntries > 0) {
             samplePlayers = playerStream
                     .limit(maxListEntries)
-                    .collect(Collectors.toCollection(ArrayList::new));
-
-            final int numberOfLeftOutPlayers = players.size() - maxListEntries;
-            if (numberOfLeftOutPlayers > 0) {
-                samplePlayers.add(
-                        new ServerPing.SamplePlayer(
-                                String.format("...and %d more", numberOfLeftOutPlayers),
-                                UUID.randomUUID()
-                        )
-                );
-            }
+                    .toList();
         } else {
             samplePlayers = playerStream.collect(Collectors.toList());
         }
