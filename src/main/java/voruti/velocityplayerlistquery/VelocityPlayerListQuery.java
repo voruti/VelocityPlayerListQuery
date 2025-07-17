@@ -29,7 +29,8 @@ import java.util.Optional;
         url = "https://github.com/voruti/VelocityPlayerListQuery",
         authors = {"voruti"},
         dependencies = {
-                @Dependency(id = "vanishbridge", optional = true)
+                @Dependency(id = "vanishbridge", optional = true),
+                @Dependency(id = "sayanvanish", optional = true)
         }
 )
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -54,6 +55,9 @@ public class VelocityPlayerListQuery {
 
         this.hooks.vanishBridge().ifPresent(unused ->
                 this.logger.info("VanishBridge found, enabling vanish support"));
+
+        this.hooks.sayanVanish().ifPresent(unused ->
+                this.logger.info("SayanVanish found, enabling vanish support"));
 
         this.logger.info("Enabled");
     }

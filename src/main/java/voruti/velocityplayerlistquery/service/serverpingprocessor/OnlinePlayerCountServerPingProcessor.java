@@ -5,6 +5,7 @@ import com.velocitypowered.api.proxy.server.ServerPing;
 import lombok.NonNull;
 import lombok.experimental.FieldDefaults;
 import voruti.velocityplayerlistquery.hook.Hooks;
+import voruti.velocityplayerlistquery.hook.SayanVanishHook;
 import voruti.velocityplayerlistquery.hook.VanishBridgeHook;
 import voruti.velocityplayerlistquery.service.ConfigService;
 
@@ -34,10 +35,12 @@ public class OnlinePlayerCountServerPingProcessor extends ServerPingProcessor {
     public void applyToServerPing(@NonNull final ServerPing.Builder serverPing) {
         super.applyToServerPing(serverPing);
 
-        serverPing.onlinePlayers(
-                this.hooks.vanishBridge()
-                        .map(VanishBridgeHook::unvanishedPlayerCount)
-                        .orElse(this.proxyServer.getPlayerCount())
-        );
+        int visiblePlayers = this.hooks.vanishBridge()
+                .map(VanishBridgeHook::unvanishedPlayerCount)
+                .or(() -> this.hooks.sayanVanish()
+                        .map(SayanVanishHook::unvanishedPlayerCount))
+                .orElse(this.proxyServer.getPlayerCount());
+
+        serverPing.onlinePlayers(visiblePlayers);
     }
 }
