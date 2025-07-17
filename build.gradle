@@ -7,7 +7,7 @@ plugins {
 }
 
 group = 'voruti'
-version = '1.4.0'
+version = '1.5.0'
 
 repositories {
     mavenCentral()
@@ -22,6 +22,9 @@ repositories {
     maven {
         url = 'https://repo.loapu.dev/releases'
     }
+    maven {
+        url "https://repo.sayandev.org/snapshots"
+    }
 }
 
 def velocityApiVersion = '3.2.0-SNAPSHOT'
@@ -31,6 +34,7 @@ dependencies {
     annotationProcessor("com.velocitypowered:velocity-api:$velocityApiVersion")
 
     compileOnly("dev.loapu.vanishbridge:vanishbridge-api:1.0")
+    compileOnly("org.sayandev:sayanvanish-api:1.7.0-SNAPSHOT")
 }
 
 def targetJavaVersion = 17
