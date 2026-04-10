@@ -27,7 +27,7 @@ repositories {
     }
 }
 
-def velocityApiVersion = '3.2.0-SNAPSHOT'
+def velocityApiVersion = '3.5.0-SNAPSHOT'
 
 dependencies {
     compileOnly("com.velocitypowered:velocity-api:$velocityApiVersion")
@@ -37,7 +37,7 @@ dependencies {
     compileOnly("org.sayandev:sayanvanish-api:1.7.0-SNAPSHOT")
 }
 
-def targetJavaVersion = 17
+def targetJavaVersion = 21
 java {
     toolchain.languageVersion = JavaLanguageVersion.of(targetJavaVersion)
 }
