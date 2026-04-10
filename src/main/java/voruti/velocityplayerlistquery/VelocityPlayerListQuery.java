@@ -1,5 +1,6 @@
 package voruti.velocityplayerlistquery;
 
+import com.google.inject.Inject;
 import com.velocitypowered.api.event.EventTask;
 import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
@@ -18,7 +19,6 @@ import voruti.velocityplayerlistquery.service.ConfigService;
 import voruti.velocityplayerlistquery.service.serverpingprocessor.ServerPingProcessor;
 import voruti.velocityplayerlistquery.service.serverpingprocessor.ServerPingProcessorRegistry;
 
-import javax.inject.Inject;
 import java.util.Optional;
 
 @Plugin(

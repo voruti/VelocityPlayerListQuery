@@ -3,6 +3,7 @@ package voruti.velocityplayerlistquery.service;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import com.velocitypowered.api.plugin.annotation.DataDirectory;
 import lombok.AccessLevel;
 import lombok.NonNull;
@@ -10,7 +11,6 @@ import lombok.experimental.FieldDefaults;
 import org.slf4j.Logger;
 import voruti.velocityplayerlistquery.model.Config;
 
-import javax.inject.Singleton;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;

@@ -1,11 +1,11 @@
 package voruti.velocityplayerlistquery.hook;
 
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import com.velocitypowered.api.proxy.ProxyServer;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 
-import javax.inject.Singleton;
 import java.util.Optional;
 
 @Singleton

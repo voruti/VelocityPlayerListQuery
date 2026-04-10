@@ -1,5 +1,7 @@
 package voruti.velocityplayerlistquery.service.serverpingprocessor;
 
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.ProxyServer;
 import com.velocitypowered.api.proxy.server.ServerPing;
@@ -13,8 +15,6 @@ import voruti.velocityplayerlistquery.model.Config.PlayerListMode;
 import voruti.velocityplayerlistquery.service.ConfigService;
 import voruti.velocityplayerlistquery.service.ServerListEntryBuilderService;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.EnumSet;
