@@ -12,23 +12,13 @@ import java.util.Optional;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class Hooks {
 
-    VanishBridgeHook vanishBridgeHook;
     SayanVanishHook sayanVanishHook;
 
     @Inject
     public Hooks(ProxyServer server) {
-        this.vanishBridgeHook = server
-                .getPluginManager()
-                .isLoaded("vanishbridge")
-                ? new VanishBridgeHook(server)
-                : null;
         this.sayanVanishHook = server.getPluginManager().isLoaded("sayanvanish")
                 ? new SayanVanishHook(server)
                 : null;
-    }
-
-    public Optional<VanishBridgeHook> vanishBridge() {
-        return Optional.ofNullable(vanishBridgeHook);
     }
 
     public Optional<SayanVanishHook> sayanVanish() {

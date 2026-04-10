@@ -9,7 +9,6 @@ import lombok.NonNull;
 import lombok.experimental.FieldDefaults;
 import voruti.velocityplayerlistquery.hook.Hooks;
 import voruti.velocityplayerlistquery.hook.SayanVanishHook;
-import voruti.velocityplayerlistquery.hook.VanishBridgeHook;
 import voruti.velocityplayerlistquery.model.Config;
 import voruti.velocityplayerlistquery.model.Config.PlayerListMode;
 import voruti.velocityplayerlistquery.service.ConfigService;
@@ -55,9 +54,8 @@ public class PlayerListServerPingProcessor extends ServerPingProcessor {
         super.applyToServerPing(serverPing);
 
         // collect players:
-        final Collection<Player> players = this.hooks.vanishBridge()
-                .map(VanishBridgeHook::unvanishedPlayers)
-                .or(() -> this.hooks.sayanVanish().map(SayanVanishHook::unvanishedPlayers))
+        final Collection<Player> players = this.hooks.sayanVanish()
+                .map(SayanVanishHook::unvanishedPlayers)
                 .orElse(this.proxyServer.getAllPlayers());
 
         final Stream<ServerPing.SamplePlayer> playerStream = players.stream()

@@ -53,9 +53,6 @@ public class VelocityPlayerListQuery {
     public void onProxyInitialization(ProxyInitializeEvent ignored) {
         this.configService.reloadConfig();
 
-        this.hooks.vanishBridge().ifPresent(unused ->
-                this.logger.info("VanishBridge found, enabling vanish support"));
-
         this.hooks.sayanVanish().ifPresent(unused ->
                 this.logger.info("SayanVanish found, enabling vanish support"));
 

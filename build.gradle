@@ -20,9 +20,6 @@ repositories {
         url = "https://oss.sonatype.org/content/groups/public/"
     }
     maven {
-        url = 'https://repo.loapu.dev/releases'
-    }
-    maven {
         url "https://repo.sayandev.org/snapshots"
     }
 }
@@ -33,7 +30,6 @@ dependencies {
     compileOnly("com.velocitypowered:velocity-api:$velocityApiVersion")
     annotationProcessor("com.velocitypowered:velocity-api:$velocityApiVersion")
 
-    compileOnly("dev.loapu.vanishbridge:vanishbridge-api:1.0")
     compileOnly("org.sayandev:sayanvanish-api:1.7.0-SNAPSHOT")
 }
 
