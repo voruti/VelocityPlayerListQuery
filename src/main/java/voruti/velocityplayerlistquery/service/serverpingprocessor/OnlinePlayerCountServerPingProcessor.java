@@ -1,16 +1,14 @@
 package voruti.velocityplayerlistquery.service.serverpingprocessor;
 
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import com.velocitypowered.api.proxy.ProxyServer;
 import com.velocitypowered.api.proxy.server.ServerPing;
 import lombok.NonNull;
 import lombok.experimental.FieldDefaults;
 import voruti.velocityplayerlistquery.hook.Hooks;
 import voruti.velocityplayerlistquery.hook.SayanVanishHook;
-import voruti.velocityplayerlistquery.hook.VanishBridgeHook;
 import voruti.velocityplayerlistquery.service.ConfigService;
-
-import javax.inject.Inject;
-import javax.inject.Singleton;
 
 @Singleton
 @FieldDefaults(level = lombok.AccessLevel.PRIVATE)
@@ -35,10 +33,8 @@ public class OnlinePlayerCountServerPingProcessor extends ServerPingProcessor {
     public void applyToServerPing(@NonNull final ServerPing.Builder serverPing) {
         super.applyToServerPing(serverPing);
 
-        int visiblePlayers = this.hooks.vanishBridge()
-                .map(VanishBridgeHook::unvanishedPlayerCount)
-                .or(() -> this.hooks.sayanVanish()
-                        .map(SayanVanishHook::unvanishedPlayerCount))
+        int visiblePlayers = this.hooks.sayanVanish()
+                .map(SayanVanishHook::unvanishedPlayerCount)
                 .orElse(this.proxyServer.getPlayerCount());
 
         serverPing.onlinePlayers(visiblePlayers);

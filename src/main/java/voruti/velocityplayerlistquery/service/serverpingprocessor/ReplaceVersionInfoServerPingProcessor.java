@@ -1,14 +1,13 @@
 package voruti.velocityplayerlistquery.service.serverpingprocessor;
 
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import com.velocitypowered.api.proxy.server.ServerPing;
 import com.velocitypowered.api.proxy.server.ServerPing.Version;
 import lombok.NonNull;
 import lombok.experimental.FieldDefaults;
 import voruti.velocityplayerlistquery.model.Config;
 import voruti.velocityplayerlistquery.service.ConfigService;
-
-import javax.inject.Inject;
-import javax.inject.Singleton;
 
 @Singleton
 @FieldDefaults(level = lombok.AccessLevel.PRIVATE)

@@ -1,5 +1,7 @@
 package voruti.velocityplayerlistquery.service.serverpingprocessor;
 
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.ProxyServer;
 import com.velocitypowered.api.proxy.server.ServerPing;
@@ -7,14 +9,11 @@ import lombok.NonNull;
 import lombok.experimental.FieldDefaults;
 import voruti.velocityplayerlistquery.hook.Hooks;
 import voruti.velocityplayerlistquery.hook.SayanVanishHook;
-import voruti.velocityplayerlistquery.hook.VanishBridgeHook;
 import voruti.velocityplayerlistquery.model.Config;
 import voruti.velocityplayerlistquery.model.Config.PlayerListMode;
 import voruti.velocityplayerlistquery.service.ConfigService;
 import voruti.velocityplayerlistquery.service.ServerListEntryBuilderService;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.EnumSet;
@@ -55,9 +54,8 @@ public class PlayerListServerPingProcessor extends ServerPingProcessor {
         super.applyToServerPing(serverPing);
 
         // collect players:
-        final Collection<Player> players = this.hooks.vanishBridge()
-                .map(VanishBridgeHook::unvanishedPlayers)
-                .or(() -> this.hooks.sayanVanish().map(SayanVanishHook::unvanishedPlayers))
+        final Collection<Player> players = this.hooks.sayanVanish()
+                .map(SayanVanishHook::unvanishedPlayers)
                 .orElse(this.proxyServer.getAllPlayers());
 
         final Stream<ServerPing.SamplePlayer> playerStream = players.stream()

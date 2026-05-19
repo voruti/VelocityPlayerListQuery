@@ -1,5 +1,6 @@
 package voruti.velocityplayerlistquery;
 
+import com.google.inject.Inject;
 import com.velocitypowered.api.event.EventTask;
 import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
@@ -18,7 +19,6 @@ import voruti.velocityplayerlistquery.service.ConfigService;
 import voruti.velocityplayerlistquery.service.serverpingprocessor.ServerPingProcessor;
 import voruti.velocityplayerlistquery.service.serverpingprocessor.ServerPingProcessorRegistry;
 
-import javax.inject.Inject;
 import java.util.Optional;
 
 @Plugin(
@@ -52,9 +52,6 @@ public class VelocityPlayerListQuery {
     @Subscribe
     public void onProxyInitialization(ProxyInitializeEvent ignored) {
         this.configService.reloadConfig();
-
-        this.hooks.vanishBridge().ifPresent(unused ->
-                this.logger.info("VanishBridge found, enabling vanish support"));
 
         this.hooks.sayanVanish().ifPresent(unused ->
                 this.logger.info("SayanVanish found, enabling vanish support"));
