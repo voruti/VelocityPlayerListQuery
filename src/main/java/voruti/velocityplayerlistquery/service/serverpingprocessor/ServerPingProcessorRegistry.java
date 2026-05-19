@@ -2,10 +2,9 @@ package voruti.velocityplayerlistquery.service.serverpingprocessor;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import java.util.List;
 import lombok.Value;
 import lombok.experimental.Accessors;
-
-import java.util.List;
 
 @Singleton
 @Value

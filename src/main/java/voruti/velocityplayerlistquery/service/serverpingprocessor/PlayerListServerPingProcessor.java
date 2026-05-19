@@ -24,65 +24,62 @@ import voruti.velocityplayerlistquery.service.ServerListEntryBuilderService;
 @FieldDefaults(level = lombok.AccessLevel.PRIVATE)
 public class PlayerListServerPingProcessor extends ServerPingProcessor {
 
-    @Inject
-    ConfigService configService;
+  @Inject ConfigService configService;
 
-    @Inject
-    ProxyServer proxyServer;
+  @Inject ProxyServer proxyServer;
 
-    @Inject
-    ServerListEntryBuilderService serverListEntryBuilderService;
+  @Inject ServerListEntryBuilderService serverListEntryBuilderService;
 
-    @Inject
-    Hooks hooks;
+  @Inject Hooks hooks;
 
+  @Override
+  public boolean isEnabled() {
+    final Config config = this.configService.getConfig();
+    final PlayerListMode playerListMode = config.playerListMode();
 
-    @Override
-    public boolean isEnabled() {
-        final Config config = this.configService.getConfig();
-        final PlayerListMode playerListMode = config.playerListMode();
+    return playerListMode != null
+        && EnumSet.of(PlayerListMode.ADD, PlayerListMode.REPLACE).contains(playerListMode)
+        && config.serverListEntryFormat() != null
+        && !this.proxyServer.getAllPlayers().isEmpty();
+  }
 
-        return playerListMode != null
-                && EnumSet.of(PlayerListMode.ADD, PlayerListMode.REPLACE).contains(playerListMode)
-                && config.serverListEntryFormat() != null
-                && !this.proxyServer.getAllPlayers().isEmpty();
-    }
+  @Override
+  public void applyToServerPing(@NonNull final ServerPing.Builder serverPing) {
+    super.applyToServerPing(serverPing);
 
-    @Override
-    public void applyToServerPing(@NonNull final ServerPing.Builder serverPing) {
-        super.applyToServerPing(serverPing);
+    // collect players:
+    final Collection<Player> players =
+        this.hooks
+            .sayanVanish()
+            .map(SayanVanishHook::unvanishedPlayers)
+            .orElse(this.proxyServer.getAllPlayers());
 
-        // collect players:
-        final Collection<Player> players = this.hooks.sayanVanish()
-                .map(SayanVanishHook::unvanishedPlayers)
-                .orElse(this.proxyServer.getAllPlayers());
-
-        final Stream<ServerPing.SamplePlayer> playerStream = players.stream()
-                // format players:
-                .map(player -> new ServerPing.SamplePlayer(
+    final Stream<ServerPing.SamplePlayer> playerStream =
+        players.stream()
+            // format players:
+            .map(
+                player ->
+                    new ServerPing.SamplePlayer(
                         this.serverListEntryBuilderService.buildForPlayer(player),
-                        player.getGameProfile().getId()
-                ))
-                // sort alphabetically:
-                .sorted(Comparator.comparing(ServerPing.SamplePlayer::getName));
+                        player.getGameProfile().getId()))
+            // sort alphabetically:
+            .sorted(Comparator.comparing(ServerPing.SamplePlayer::getName));
 
-        final Config config = this.configService.getConfig();
-        final int maxListEntries = config.maxListEntries();
+    final Config config = this.configService.getConfig();
+    final int maxListEntries = config.maxListEntries();
 
-        // limit number of players shown in list, if configured:
-        final List<ServerPing.SamplePlayer> samplePlayers;
-        if (maxListEntries > 0) {
-            samplePlayers = playerStream
-                    .limit(maxListEntries)
-                    .toList();
-        } else {
-            samplePlayers = playerStream.collect(Collectors.toList());
-        }
-
-        if (config.playerListMode() == PlayerListMode.REPLACE) {
-            serverPing.clearSamplePlayers();
-        }
-
-        serverPing.samplePlayers(samplePlayers.toArray(new ServerPing.SamplePlayer[0]));
+    // limit number of players shown in list, if configured:
+    final List<ServerPing.SamplePlayer> samplePlayers;
+    if (maxListEntries > 0) {
+      samplePlayers = playerStream.limit(maxListEntries).toList();
+    } else {
+      samplePlayers = playerStream.collect(Collectors.toList());
     }
+
+    if (config.playerListMode() == PlayerListMode.REPLACE) {
+      serverPing.clearSamplePlayers();
+    }
+
+    serverPing.samplePlayers(samplePlayers.toArray(new ServerPing.SamplePlayer[0]));
+  }
 }

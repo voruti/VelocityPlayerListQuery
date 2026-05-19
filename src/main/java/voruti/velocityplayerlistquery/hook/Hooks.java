@@ -11,16 +11,15 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class Hooks {
 
-    SayanVanishHook sayanVanishHook;
+  SayanVanishHook sayanVanishHook;
 
-    @Inject
-    public Hooks(ProxyServer server) {
-        this.sayanVanishHook = server.getPluginManager().isLoaded("sayanvanish")
-                ? new SayanVanishHook(server)
-                : null;
-    }
+  @Inject
+  public Hooks(ProxyServer server) {
+    this.sayanVanishHook =
+        server.getPluginManager().isLoaded("sayanvanish") ? new SayanVanishHook(server) : null;
+  }
 
-    public Optional<SayanVanishHook> sayanVanish() {
-        return Optional.ofNullable(sayanVanishHook);
-    }
+  public Optional<SayanVanishHook> sayanVanish() {
+    return Optional.ofNullable(sayanVanishHook);
+  }
 }
