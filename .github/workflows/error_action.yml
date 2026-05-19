@@ -43,3 +43,4 @@ jobs:
           VALIDATE_JSCPD: false
           FILTER_REGEX_EXCLUDE: (^|/)gradlew$
           JAVA_FILE_NAME: google_checks.xml
+          MARKDOWN_CONFIG_FILE: .markdownlint.yml
