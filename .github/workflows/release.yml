@@ -11,10 +11,10 @@ jobs:
     outputs:
       on_main: ${{ steps.contains_tag.outputs.retval }}
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5
         with:
           persist-credentials: false
-      - uses: rickstaa/action-contains-tag@v1.2.10
+      - uses: rickstaa/action-contains-tag@a9ff27d505ba2bf074a2ebb48b208e76d35ff308 # v1.2.10
         id: contains_tag
         with:
           reference: "main"
@@ -43,7 +43,7 @@ jobs:
           arguments: build
       # --- from main.yml ---
 
-      - uses: "marvinpinto/action-automatic-releases@v1.2.1"
+      - uses: "marvinpinto/action-automatic-releases@919008cf3f741b179569b7a6fb4d8860689ab7f0" # v1.2.1
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
           prerelease: false
