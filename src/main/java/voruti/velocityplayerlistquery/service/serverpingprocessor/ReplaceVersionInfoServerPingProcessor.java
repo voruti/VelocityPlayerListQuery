@@ -13,27 +13,25 @@ import voruti.velocityplayerlistquery.service.ConfigService;
 @FieldDefaults(level = lombok.AccessLevel.PRIVATE)
 public class ReplaceVersionInfoServerPingProcessor extends ServerPingProcessor {
 
-    @Inject
-    ConfigService configService;
+  @Inject ConfigService configService;
 
+  @Override
+  public boolean isEnabled() {
+    final Config config = this.configService.getConfig();
 
-    @Override
-    public boolean isEnabled() {
-        final Config config = this.configService.getConfig();
+    return config.replaceVersionInfo() && config.versionName() != null;
+  }
 
-        return config.replaceVersionInfo()
-                && config.versionName() != null;
-    }
+  @Override
+  public void applyToServerPing(@NonNull final ServerPing.Builder serverPing) {
+    super.applyToServerPing(serverPing);
 
-    @Override
-    public void applyToServerPing(@NonNull final ServerPing.Builder serverPing) {
-        super.applyToServerPing(serverPing);
+    final Config config = this.configService.getConfig();
 
-        final Config config = this.configService.getConfig();
-
-        serverPing.version(new Version(
-                config.versionProtocol(),
-                config.versionName() // should not be null, checked in isEnabled()
-        ));
-    }
+    serverPing.version(
+        new Version(
+            config.versionProtocol(),
+            config.versionName() // should not be null, checked in isEnabled()
+            ));
+  }
 }

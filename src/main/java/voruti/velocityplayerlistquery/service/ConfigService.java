@@ -13,28 +13,24 @@ import voruti.velocityplayerlistquery.model.Config;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ConfigService {
 
-    @Inject
-    Logger logger;
+  @Inject Logger logger;
 
-    @Inject
-    PersistenceService persistenceService;
+  @Inject PersistenceService persistenceService;
 
-    @Nullable
-    Config cachedConfig;
+  @Nullable Config cachedConfig;
 
-
-    @NonNull
-    public Config getConfig() {
-        if (this.cachedConfig == null) {
-            this.reloadConfig();
-        }
-
-        return this.cachedConfig;
+  @NonNull
+  public Config getConfig() {
+    if (this.cachedConfig == null) {
+      this.reloadConfig();
     }
 
-    public void reloadConfig() {
-        logger.trace("Loading config from persistence service...");
+    return this.cachedConfig;
+  }
 
-        this.cachedConfig = this.persistenceService.loadConfig();
-    }
+  public void reloadConfig() {
+    logger.trace("Loading config from persistence service...");
+
+    this.cachedConfig = this.persistenceService.loadConfig();
+  }
 }

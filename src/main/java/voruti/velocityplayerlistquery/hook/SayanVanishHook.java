@@ -15,26 +15,26 @@ import java.util.Collection;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class SayanVanishHook {
 
-    ProxyServer server;
+  ProxyServer server;
 
-    public Collection<Player> unvanishedPlayers() {
-        var api = SayanVanishAPI.getInstance();
-        var players = server.getAllPlayers();
-        var vanishedUsers = api.getVanishedUsers();
-        Collection<Player> vanishedPlayers = new ArrayList<>();
+  public Collection<Player> unvanishedPlayers() {
+    var api = SayanVanishAPI.getInstance();
+    var players = server.getAllPlayers();
+    var vanishedUsers = api.getVanishedUsers();
+    Collection<Player> vanishedPlayers = new ArrayList<>();
 
-        for (User user : vanishedUsers) {
-            var player = server.getPlayer(user.getUniqueId());
-            player.ifPresent(vanishedPlayers::add);
-        }
-
-        Collection<Player> unvanishedPlayers = new ArrayList<>(players);
-        unvanishedPlayers.removeAll(vanishedPlayers);
-
-        return unvanishedPlayers;
+    for (User user : vanishedUsers) {
+      var player = server.getPlayer(user.getUniqueId());
+      player.ifPresent(vanishedPlayers::add);
     }
 
-    public int unvanishedPlayerCount() {
-        return unvanishedPlayers().size();
-    }
+    Collection<Player> unvanishedPlayers = new ArrayList<>(players);
+    unvanishedPlayers.removeAll(vanishedPlayers);
+
+    return unvanishedPlayers;
+  }
+
+  public int unvanishedPlayerCount() {
+    return unvanishedPlayers().size();
+  }
 }

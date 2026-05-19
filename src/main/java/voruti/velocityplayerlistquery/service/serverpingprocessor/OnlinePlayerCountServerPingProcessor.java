@@ -14,29 +14,27 @@ import voruti.velocityplayerlistquery.service.ConfigService;
 @FieldDefaults(level = lombok.AccessLevel.PRIVATE)
 public class OnlinePlayerCountServerPingProcessor extends ServerPingProcessor {
 
-    @Inject
-    ConfigService configService;
+  @Inject ConfigService configService;
 
-    @Inject
-    ProxyServer proxyServer;
+  @Inject ProxyServer proxyServer;
 
-    @Inject
-    Hooks hooks;
+  @Inject Hooks hooks;
 
+  @Override
+  public boolean isEnabled() {
+    return this.configService.getConfig().replaceOnlinePlayerCount();
+  }
 
-    @Override
-    public boolean isEnabled() {
-        return this.configService.getConfig().replaceOnlinePlayerCount();
-    }
+  @Override
+  public void applyToServerPing(@NonNull final ServerPing.Builder serverPing) {
+    super.applyToServerPing(serverPing);
 
-    @Override
-    public void applyToServerPing(@NonNull final ServerPing.Builder serverPing) {
-        super.applyToServerPing(serverPing);
+    int visiblePlayers =
+        this.hooks
+            .sayanVanish()
+            .map(SayanVanishHook::unvanishedPlayerCount)
+            .orElse(this.proxyServer.getPlayerCount());
 
-        int visiblePlayers = this.hooks.sayanVanish()
-                .map(SayanVanishHook::unvanishedPlayerCount)
-                .orElse(this.proxyServer.getPlayerCount());
-
-        serverPing.onlinePlayers(visiblePlayers);
-    }
+    serverPing.onlinePlayers(visiblePlayers);
+  }
 }

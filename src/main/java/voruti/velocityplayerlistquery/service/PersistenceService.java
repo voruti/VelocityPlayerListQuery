@@ -5,15 +5,14 @@ import com.google.gson.GsonBuilder;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.velocitypowered.api.plugin.annotation.DataDirectory;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import lombok.AccessLevel;
 import lombok.NonNull;
 import lombok.experimental.FieldDefaults;
 import org.slf4j.Logger;
 import voruti.velocityplayerlistquery.model.Config;
-
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 
 @Singleton
 @FieldDefaults(level = AccessLevel.PRIVATE)

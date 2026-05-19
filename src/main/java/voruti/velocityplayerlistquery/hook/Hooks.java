@@ -3,10 +3,9 @@ package voruti.velocityplayerlistquery.hook;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.velocitypowered.api.proxy.ProxyServer;
+import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
-
-import java.util.Optional;
 
 @Singleton
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)

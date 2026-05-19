@@ -12,22 +12,21 @@ import java.util.List;
 @Accessors(fluent = true)
 public class ServerPingProcessorRegistry {
 
-    List<ServerPingProcessor> serverPingProcessorList;
+  List<ServerPingProcessor> serverPingProcessorList;
 
-
-    @Inject
-    public ServerPingProcessorRegistry(
-            FillMissingVersionInfoServerPingProcessor fillMissingVersionInfoServerPingProcessor,
-            MaxPlayerCountServerPingProcessor maxPlayerCountServerPingProcessor,
-            OnlinePlayerCountServerPingProcessor onlinePlayerCountServerPingProcessor,
-            PlayerListServerPingProcessor playerListServerPingProcessor,
-            ReplaceVersionInfoServerPingProcessor replaceVersionInfoServerPingProcessor) {
-        this.serverPingProcessorList = List.of(
-                fillMissingVersionInfoServerPingProcessor,
-                maxPlayerCountServerPingProcessor,
-                onlinePlayerCountServerPingProcessor,
-                playerListServerPingProcessor,
-                replaceVersionInfoServerPingProcessor
-        );
-    }
+  @Inject
+  public ServerPingProcessorRegistry(
+      FillMissingVersionInfoServerPingProcessor fillMissingVersionInfoServerPingProcessor,
+      MaxPlayerCountServerPingProcessor maxPlayerCountServerPingProcessor,
+      OnlinePlayerCountServerPingProcessor onlinePlayerCountServerPingProcessor,
+      PlayerListServerPingProcessor playerListServerPingProcessor,
+      ReplaceVersionInfoServerPingProcessor replaceVersionInfoServerPingProcessor) {
+    this.serverPingProcessorList =
+        List.of(
+            fillMissingVersionInfoServerPingProcessor,
+            maxPlayerCountServerPingProcessor,
+            onlinePlayerCountServerPingProcessor,
+            playerListServerPingProcessor,
+            replaceVersionInfoServerPingProcessor);
+  }
 }

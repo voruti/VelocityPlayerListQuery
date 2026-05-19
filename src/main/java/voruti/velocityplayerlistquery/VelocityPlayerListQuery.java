@@ -9,6 +9,7 @@ import com.velocitypowered.api.event.proxy.ProxyReloadEvent;
 import com.velocitypowered.api.plugin.Dependency;
 import com.velocitypowered.api.plugin.Plugin;
 import com.velocitypowered.api.proxy.server.ServerPing;
+import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.NonNull;
 import lombok.experimental.FieldDefaults;
@@ -18,8 +19,6 @@ import voruti.velocityplayerlistquery.model.exception.InvalidServerPingException
 import voruti.velocityplayerlistquery.service.ConfigService;
 import voruti.velocityplayerlistquery.service.serverpingprocessor.ServerPingProcessor;
 import voruti.velocityplayerlistquery.service.serverpingprocessor.ServerPingProcessorRegistry;
-
-import java.util.Optional;
 
 @Plugin(
         id = "velocityplayerlistquery",

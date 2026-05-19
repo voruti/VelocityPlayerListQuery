@@ -12,22 +12,19 @@ import voruti.velocityplayerlistquery.service.ConfigService;
 @FieldDefaults(level = lombok.AccessLevel.PRIVATE)
 public class MaxPlayerCountServerPingProcessor extends ServerPingProcessor {
 
-    @Inject
-    ConfigService configService;
+  @Inject ConfigService configService;
 
-    @Inject
-    ProxyServer proxyServer;
+  @Inject ProxyServer proxyServer;
 
+  @Override
+  public boolean isEnabled() {
+    return this.configService.getConfig().replaceMaxPlayerCount();
+  }
 
-    @Override
-    public boolean isEnabled() {
-        return this.configService.getConfig().replaceMaxPlayerCount();
-    }
+  @Override
+  public void applyToServerPing(@NonNull final ServerPing.Builder serverPing) {
+    super.applyToServerPing(serverPing);
 
-    @Override
-    public void applyToServerPing(@NonNull final ServerPing.Builder serverPing) {
-        super.applyToServerPing(serverPing);
-
-        serverPing.maximumPlayers(this.proxyServer.getConfiguration().getShowMaxPlayers());
-    }
+    serverPing.maximumPlayers(this.proxyServer.getConfiguration().getShowMaxPlayers());
+  }
 }

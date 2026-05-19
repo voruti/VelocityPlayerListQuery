@@ -4,13 +4,12 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.velocitypowered.api.proxy.server.ServerPing;
 import com.velocitypowered.api.proxy.server.ServerPing.Version;
+import java.util.Optional;
 import lombok.NonNull;
 import lombok.experimental.FieldDefaults;
 import voruti.velocityplayerlistquery.model.Config;
 import voruti.velocityplayerlistquery.model.exception.InvalidServerPingException;
 import voruti.velocityplayerlistquery.service.ConfigService;
-
-import java.util.Optional;
 
 @Singleton
 @FieldDefaults(level = lombok.AccessLevel.PRIVATE)
