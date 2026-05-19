@@ -5,7 +5,7 @@ import com.google.inject.Singleton;
 import lombok.AccessLevel;
 import lombok.NonNull;
 import lombok.experimental.FieldDefaults;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 import voruti.velocityplayerlistquery.model.Config;
 

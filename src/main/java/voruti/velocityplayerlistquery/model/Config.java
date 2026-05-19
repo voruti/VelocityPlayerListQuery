@@ -3,7 +3,7 @@ package voruti.velocityplayerlistquery.model;
 import lombok.Builder;
 import lombok.Value;
 import lombok.experimental.Accessors;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jspecify.annotations.Nullable;
 
 @Value
 @Builder

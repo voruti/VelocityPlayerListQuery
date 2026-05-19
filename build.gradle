@@ -31,6 +31,8 @@ dependencies {
     annotationProcessor("com.velocitypowered:velocity-api:$velocityApiVersion")
 
     compileOnly("org.sayandev:sayanvanish-api:1.7.0-SNAPSHOT")
+
+    implementation("org.jspecify:jspecify:1.0.0")
 }
 
 def targetJavaVersion = 21
