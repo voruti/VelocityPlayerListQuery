@@ -24,7 +24,7 @@ repositories {
     }
 }
 
-def velocityApiVersion = '3.5.0-SNAPSHOT'
+def velocityApiVersion = '3.5.1'
 
 dependencies {
     compileOnly("com.velocitypowered:velocity-api:$velocityApiVersion")
