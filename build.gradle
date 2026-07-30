@@ -32,7 +32,7 @@ dependencies {
 
     compileOnly("org.sayandev:sayanvanish-api:1.7.0-SNAPSHOT")
 
-    implementation("org.jspecify:jspecify:1.0.0")
+    implementation("org.jspecify:jspecify:1.0.1")
 }
 
 def targetJavaVersion = 21
